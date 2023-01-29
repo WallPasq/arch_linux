@@ -20,6 +20,8 @@ paru discord						# Aplicativo de comunicação voltado para comunidades
 paru telegram-desktop		# Serviço de mensagens instantâneas
 paru scrot							# Linha de comando que serve para capturar tela
 paru woeusb-ng					# Ferramenta que permite criar bootável do Windows
+paru pass-git-helper		# Instala o gerenciador de senhas pass. Para informações de configuração: https://github.com/languitar/pass-git-helper
+paru github-cli					# Instala o controle do GitHub via linhas de comando. Para mais informações: https://github.com/cli/cli
 
 ## Configurações e plugins para o ZSH (créditos ao LuizOMF -> https://gist.github.com/luizomf/1fe6c67f307fc1df19e58f224134dc8f)
 chsh -s /bin/zsh
