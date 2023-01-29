@@ -1,6 +1,9 @@
 ;; Ajustes na inicialização do Emacs
 (setq inhibit-startup-message t)	; Remove a mensagem de boas-vindas
+(setq auto-save-default nil)			; Remove o save automático
 (setq-default tab-width 2)				; Ajusta o tamanho da identação
+(setq-default cursor-type 'bar)		; Define o cursor como barra
+(blink-cursor-mode 0)							; Desabilita o pisca-pisca do cursor
 (tool-bar-mode -1)								; Remove a toolbar
 (tooltip-mode -1) 								; Remove as tooltips
 (set-fringe-mode 10) 							; Ajusta um "respiro" de 10 pixels nas bordas laterais
@@ -21,9 +24,9 @@
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
 
-;; Melhora a rolagem
+;; Melhora a rolagem (scroll) do mouse
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))	; Uma linha por vez
-(setq mouse-wheel-progressive-speed nil)						; Não acelear a rolagem
+(setq mouse-wheel-progressive-speed nil)						; Não acelera a rolagem
 (setq mouse-wheel-follow-mouse 't)									; Só rola na janela ativa
 (setq scroll-step 1)
 
@@ -41,9 +44,8 @@
 
 ;; Inicializa as fontes do pacote
 (require 'package)
-(setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
 												 ("elpa" . "https://elpa.gnu.org/packages/")
-												 ("melpa" . "https://melpa.org/packages/")
 												 ("nongnu-elpa" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
 (unless package-archive-contents
@@ -56,6 +58,26 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+;; Insere o número da linha
+(require 'display-line-numbers)
+(defcustom display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode doc-view-mode which-key-mode telega-chat-mode telega-root-mode)
+  "Desabilita o display-line-numbers nos modos listados"
+  :group 'display-line-numbers
+  :type 'list
+  :version "green")
+
+(defun display-line-numbers--turn-on ()
+  "Ativa o display-line-numbers, exceto nos modos listados em `display-line-numbers-exempt-modes'"
+  (if (and
+       (not (member major-mode display-line-numbers-exempt-modes))
+       (not (minibufferp)))
+      (display-line-numbers-mode)))
+(global-display-line-numbers-mode)
+
+;; Desabilita o mouse no Emacs
+(use-package disable-mouse)
+(global-disable-mouse-mode)
+
 ;; Define o tema Dracula como padrão
 (use-package dracula-theme)
 (load-theme 'dracula t)
@@ -63,6 +85,17 @@
 ;; Alerta quando algum comando gráfico for executado
 (setq visible-bell t)
 
+;; Habilita para o Emacs reconhecer o Unicode
+  ;; Ativa o suporte adequado aos caracteres Unicode
+(defun replace-unicode-font-mapping (block-name old-font new-font)
+  (let* ((block-idx (cl-position-if
+                         (lambda (i) (string-equal (car i) block-name))
+                         unicode-fonts-block-font-mapping))
+         (block-fonts (cadr (nth block-idx unicode-fonts-block-font-mapping)))
+         (updated-block (cl-substitute new-font old-font block-fonts :test 'string-equal)))
+    (setf (cdr (nth block-idx unicode-fonts-block-font-mapping))
+          `(,updated-block))))
+          
 ;; Instalação e configuração do general.el (key bindings)
 (use-package general
   :config
@@ -123,13 +156,56 @@
   :config
   (evil-collection-init))
 
+;; Hydra
+(use-package hydra
+  :defer 1)
+
+;; Configurações do dashboard
+(use-package dashboard
+	:config
+	(setq dashboard-banner-logo-title "Welcome to Emacs, Wallacy")
+	(setq dashboard-startup-banner 'logo)
+	(setq dashboard-set-init-info t)
+	(setq dashboard-center-content t)
+	(setq dashboard-items '((recents . 10)
+													(agenda . 15)
+													(bookmarks . 5)))
+	(dashboard-setup-startup-hook))
+
+;; Instala e ativa o Doom Modeline
+(use-package all-the-icons)      
+(use-package minions
+  :hook (doom-modeline-mode . minions-mode)
+  :custom
+  (minions-mode-line-lighter ""))
+
+(use-package doom-modeline
+  :custom
+  (doom-modeline-height 20)
+  (doom-modeline-bar-width 5)
+  (doom-modeline-lsp t)
+  (doom-modeline-github nil)
+  (doom-modeline-mu4e nil)
+  (doom-modeline-irc nil)
+  (doom-modeline-minor-modes t)
+  (doom-modeline-persp-name nil)
+  (doom-modeline-buffer-file-name-style 'truncate-except-project)
+  (doom-modeline-icon t)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-major-mode-icon t))
+(doom-modeline-mode 1)
+
 ;; Configurações padrão do use-package (vem com a instalação do mesmo)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(general dracula-theme use-package)))
+ '(custom-safe-themes
+	 '("12e12c708b0d968868435a6f1197d6e8e51828338566593a28804644c80f0c03" "9e721e03b78de19b5f5cbdb877de134d862f40a907e96964c4729658d1c6d94b" "21d7f1c3389d76b199fed33989fc7e13139c66e183436894a0f22aba82ff17c6" "7c284f499a1be8fcf465458f5250442ecbb26ce2fd8108abc89b241c93350004" default))
+ '(package-selected-packages
+	 '(disable-mouse dashboard hydra general dracula-theme use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
