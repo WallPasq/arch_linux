@@ -9,6 +9,7 @@
 (set-fringe-mode 10) 							; Ajusta um "respiro" de 10 pixels nas bordas laterais
 (menu-bar-mode -1) 								; Remove a barra de menu
 (scroll-bar-mode -1) 					 		; Remove a barra de rolagem
+(column-number-mode)							; Insere o número da coluna na modeline	
 (kill-buffer "*scratch*") 				; Para de criar um buffer scratch
 
 ;; Ajustes nas performance de inicialização
