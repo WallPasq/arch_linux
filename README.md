@@ -12,6 +12,6 @@ I use ZSH.
 
 I use Emacs.
 
-## Windows Manager (WM)
+## Window Manager (WM)
 
 I use exwm.
