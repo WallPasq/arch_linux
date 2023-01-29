@@ -28,7 +28,8 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))	; Uma linha por vez
 (setq mouse-wheel-progressive-speed nil)						; Não acelera a rolagem
 (setq mouse-wheel-follow-mouse 't)									; Só rola na janela ativa
-(setq scroll-step 1)
+(setq scroll-step 1)																; A rolagem pelo teclado acontece uma linha por vez
+(setq scroll-margin 7)															; Mostra as sete últimas linhas durante a rolagem
 
 ;; Ajusta a transparência da janela e maximiza a janela por padrão
 (set-frame-parameter (selected-frame) 'alpha' (90 . 90))
