@@ -100,10 +100,11 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Insert nvm (Node Version Manager) in local variables
 [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
 source /usr/share/nvm/init-nvm.sh
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
+# Enable TeleTYpewriter in local variable GPG_TTY
 export GPG_TTY=$(tty)
 
 # >>> conda initialize >>>
