@@ -1,20 +1,26 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Ajustes na inicialização do Emacs
-(setq inhibit-startup-message t)	; Remove a mensagem de boas-vindas
-(setq auto-save-default nil)			; Remove o save automático
-(setq-default tab-width 2)				; Ajusta o tamanho da identação
-(setq-default cursor-type 'bar)		; Define o cursor como barra
-(blink-cursor-mode 0)							; Desabilita o pisca-pisca do cursor
-(tool-bar-mode -1)								; Remove a toolbar
-(tooltip-mode -1) 								; Remove as tooltips
-(set-fringe-mode 10) 							; Ajusta um "respiro" de 10 pixels nas bordas laterais
-(menu-bar-mode -1) 								; Remove a barra de menu
-(scroll-bar-mode -1) 					 		; Remove a barra de rolagem
-(column-number-mode)							; Insere o número da coluna na modeline	
-(kill-buffer "*scratch*") 				; Para de criar um buffer scratch
+(setq native-comp-async-report-warnings-errors nil) ; Remove Warnings desnecessários
+(setq inhibit-startup-message t)			       				;	Remove a mensagem de boas-vindas
+(setq auto-save-default nil)					       				; Remove o save automático
+(setq-default tab-width 2)						       				; Ajusta o tamanho da identação
+(setq-default cursor-type 'bar)				       				; Define o cursor como barra
+(blink-cursor-mode 0)									       				; Desabilita o pisca-pisca do cursor
+(tool-bar-mode -1)										       				; Remove a toolbar
+(tooltip-mode -1) 										       				; Remove as tooltips
+(set-fringe-mode 10) 									       				; Ajusta um "respiro" de 10 pixels nas bordas laterais
+(menu-bar-mode -1) 										       				; Remove a barra de menu
+(scroll-bar-mode -1) 									       				; Remove a barra de rolagem
+(setq column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
+(column-number-mode t)											        ; Insere o número da coluna na modeline	
+(kill-buffer "*scratch*") 									        ; Para de criar um buffer scratch
 
 ;; Ajustes nas performance de inicialização
 	;; Reduz a frequência de coleção de lixo
 (setq gc-cons-threshold (* 2 1000 1000))
+	;; Para de guardar os arquivos de compilação no .emacs.d
+(add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
 
 	;; Mensagem de tempo de demora para carregar, e quantidade de lixo (em bytes) coletada
 (add-hook 'emacs-startup-hook
@@ -76,10 +82,6 @@
       (display-line-numbers-mode)))
 (global-display-line-numbers-mode)
 
-;; Desabilita o mouse no Emacs
-(use-package disable-mouse)
-(global-disable-mouse-mode)
-
 ;; Define o tema Dracula como padrão
 (use-package dracula-theme)
 (load-theme 'dracula t)
@@ -116,7 +118,8 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0.3)
+	(which-key-mode))
   
   ;; Insere a tecla ESC para cancelar
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -198,6 +201,39 @@
   (doom-modeline-major-mode-icon t))
 (doom-modeline-mode 1)
 
+;; Instala e ativa o neotree no atalho ctrl + \
+(use-package neotree
+	:ensure t
+	:bind (("C-\\" . 'neotree-toggle)))
+
+;; Instala o Eglot e o Corfu
+(use-package eglot)
+(defun dotfiles--lsp-deferred-if-supported ()
+  "Habilita o `eglot-ensure' somente nos modos em que ele tem suporte."
+  (unless (derived-mode-p 'emacs-lisp-mode)
+    (eglot-ensure)))
+
+(add-hook 'prog-mode-hook #'dotfiles--lsp-deferred-if-supported)
+
+(use-package corfu
+	:custom
+	(corfu-cycle t)                ; Habilita o circuito de `corfu-next/previous'
+  (corfu-auto t)                 ; Habilita auto completar
+  (corfu-quit-no-match nil)      ; Não sai, mesmo que não tenha nenhuma correspondência
+  (corfu-on-exact-match nil)     ; Configura o tratamento de correspondências exatas
+  (corfu-scroll-margin 4)        ; Mostra as quatro pŕimeiras opções correspondentes
+	:hook ((prog-mode . corfu-mode)
+				 (text-mode . corfu-mode)
+         (shell-mode . corfu-mode)
+         (eshell-mode . corfu-mode))
+  :init
+  (global-corfu-mode))
+
+(use-package emacs
+  :init
+  (setq completion-cycle-threshold 3)	; Habilita o ciclo TAB se houver poucos candidatos
+  (setq tab-always-indent 'complete))
+
 ;; Configurações padrão do use-package (vem com a instalação do mesmo)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -206,8 +242,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
 	 '("12e12c708b0d968868435a6f1197d6e8e51828338566593a28804644c80f0c03" "9e721e03b78de19b5f5cbdb877de134d862f40a907e96964c4729658d1c6d94b" "21d7f1c3389d76b199fed33989fc7e13139c66e183436894a0f22aba82ff17c6" "7c284f499a1be8fcf465458f5250442ecbb26ce2fd8108abc89b241c93350004" default))
- '(package-selected-packages
-	 '(disable-mouse dashboard hydra general dracula-theme use-package)))
+ '(package-selected-packages '(dashboard hydra general dracula-theme use-package))
+ '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

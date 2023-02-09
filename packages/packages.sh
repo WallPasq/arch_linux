@@ -11,7 +11,7 @@ makepkg -si
 cd ..
 
 ## Instalação de pacotes
-sudo pacman -S emacs							# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
+sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
 sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
@@ -50,15 +50,17 @@ git clone https://github.com/pdf/ubuntu-mono-powerline-ttf.git ~/.fonts/ubuntu-m
 fc-cache -vf
 
 ## Configuração do miniconda3
-conda activate base								# Ativa o ambiente conda
-sudo conda install jupyter 				# Instala o jupyter notebook
-sudo conda install r r-irkernel		# Instala o R no jupyter notebook
-sudo conda install numpy					# Instala o numpy
-sudo conda install pandas					# Instala o pandas
-sudo conda install matplotlib			# Instala o matplotlib
-sudo conda install scipy					# Instala o scipy	
-sudo conda install scikit-learn		# Instala o scikit-learn
-sudo conda update --all						# Atualiza todos os pacotes possíveis	
+conda activate base																	# Ativa o ambiente conda
+sudo conda install -c conda-forge python-lsp-server # Instala o Language Server Protocol para a linguagem Python
+sudo conda install jupyter 													# Instala o jupyter notebook
+sudo conda install r r-irkernel				         			# Instala o R no jupyter notebook
+sudo conda install numpy							         			# Instala o numpy
+sudo conda install pandas							         			# Instala o pandas
+sudo conda install matplotlib					         			# Instala o matplotlib
+sudo conda install scipy							         			# Instala o scipy	
+sudo conda install scikit-learn				         			# Instala o scikit-learn
+sudo conda install flask							         			#	Instala o flask
+sudo conda update --all								         			# Atualiza todos os pacotes possíveis	
 
 	## Instala o tema Dracula no Jupyter Lab
 pip install JLDracula
@@ -73,5 +75,8 @@ using Pkg
 Pkg.add("IJulia")
 exit()
 
-## Instala o node.js e npm nas versões estáveis
+## Instala o node.js e npm nas versões estáveis, além dos pacotes para de Language Server para HTML, CSS e JavaScript
 nvm install --lts
+sudo npm install -g vscode-langservers-extracted
+sudo npm i -g typescript-language-server; npm i -g typescript
+
