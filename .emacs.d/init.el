@@ -15,7 +15,7 @@
 (setq column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
 (column-number-mode t)											        ; Insere o número da coluna na modeline	
 (kill-buffer "*scratch*") 									        ; Para de criar um buffer scratch
-
+ 
 ;; Ajustes nas performance de inicialização
 	;; Reduz a frequência de coleção de lixo
 (setq gc-cons-threshold (* 2 1000 1000))
@@ -66,6 +66,13 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+	;; Inicializa as configurações com base no que está no shell
+(use-package exec-path-from-shell
+	:ensure t
+	:init
+	(when (memq window-system '(mac ns x))
+		(exec-path-from-shell-initialize)))
+
 ;; Insere o número da linha
 (require 'display-line-numbers)
 (defcustom display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode doc-view-mode which-key-mode telega-chat-mode telega-root-mode)
@@ -81,6 +88,18 @@
        (not (minibufferp)))
       (display-line-numbers-mode)))
 (global-display-line-numbers-mode)
+
+;; Instala o pacote conda e inicializa o ambiente base
+(use-package conda
+	:ensure t
+	:init
+	(setq conda-anaconda-home (expand-file-name "/opt/miniconda3"))
+	(setq conda-env-home-directory (expand-file-name "/opt/miniconda3")))
+
+;; Instala o pacote npm e ativa o mesmo
+(use-package npm-mode
+	:ensure t
+	:init (npm-global-mode))
 
 ;; Define o tema Dracula como padrão
 (use-package dracula-theme)
@@ -205,9 +224,11 @@
 (use-package neotree
 	:ensure t
 	:bind (("C-\\" . 'neotree-toggle)))
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 
 ;; Instala o Eglot e o Corfu
 (use-package eglot)
+
 (defun dotfiles--lsp-deferred-if-supported ()
   "Habilita o `eglot-ensure' somente nos modos em que ele tem suporte."
   (unless (derived-mode-p 'emacs-lisp-mode)
@@ -242,7 +263,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
 	 '("12e12c708b0d968868435a6f1197d6e8e51828338566593a28804644c80f0c03" "9e721e03b78de19b5f5cbdb877de134d862f40a907e96964c4729658d1c6d94b" "21d7f1c3389d76b199fed33989fc7e13139c66e183436894a0f22aba82ff17c6" "7c284f499a1be8fcf465458f5250442ecbb26ce2fd8108abc89b241c93350004" default))
- '(package-selected-packages '(dashboard hydra general dracula-theme use-package))
+ '(package-selected-packages '(conda dashboard hydra general dracula-theme use-package))
  '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
