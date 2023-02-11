@@ -89,24 +89,28 @@
       (display-line-numbers-mode)))
 (global-display-line-numbers-mode)
 
-;; Instala o pacote conda e inicializa o ambiente base
-(use-package conda
-	:ensure t
-	:init
-	(setq conda-anaconda-home (expand-file-name "/opt/miniconda3"))
-	(setq conda-env-home-directory (expand-file-name "/opt/miniconda3")))
-
-;; Instala o pacote npm e ativa o mesmo
-(use-package npm-mode
-	:ensure t
-	:init (npm-global-mode))
-
 ;; Define o tema Dracula como padrão
 (use-package dracula-theme)
 (load-theme 'dracula t)
 
 ;; Alerta quando algum comando gráfico for executado
 (setq visible-bell t)
+
+;; Ajusta as cores dos brackets e também faz o pareamento automático deles
+(use-package rainbow-delimiters
+	:ensure t
+ 	:hook ((prog-mode . rainbow-delimiters-mode)
+				 (text-mode . rainbow-delimiters-mode)
+         (shell-mode . rainbow-delimiters-mode)
+         (eshell-mode . rainbow-delimiters-mode)))
+
+(use-package smartparens
+	:ensure t
+	:init (require 'smartparens-config)
+	:hook ((prog-mode . smartparens-mode)
+				 (text-mode . smartparens-mode)
+         (shell-mode . smartparens-mode)
+         (eshell-mode . smartparens-mode)))
 
 ;; Habilita para o Emacs reconhecer o Unicode
   ;; Ativa o suporte adequado aos caracteres Unicode
@@ -220,11 +224,19 @@
   (doom-modeline-major-mode-icon t))
 (doom-modeline-mode 1)
 
-;; Instala e ativa o neotree no atalho ctrl + \
-(use-package neotree
+;; Instala e ativa o Treemacs no atalho Ctrl + \
+(use-package treemacs
 	:ensure t
-	:bind (("C-\\" . 'neotree-toggle)))
-(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+	:bind
+	(:map global-map
+					("C-\\" . treemacs)
+					("C-<tab>" . treemacs-select-window))
+	:config
+	(setq treemacs-is-never-other-window t))
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
 
 ;; Instala o Eglot e o Corfu
 (use-package eglot)
@@ -263,7 +275,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
 	 '("12e12c708b0d968868435a6f1197d6e8e51828338566593a28804644c80f0c03" "9e721e03b78de19b5f5cbdb877de134d862f40a907e96964c4729658d1c6d94b" "21d7f1c3389d76b199fed33989fc7e13139c66e183436894a0f22aba82ff17c6" "7c284f499a1be8fcf465458f5250442ecbb26ce2fd8108abc89b241c93350004" default))
- '(package-selected-packages '(conda dashboard hydra general dracula-theme use-package))
+ '(package-selected-packages
+	 '(smartparens rainbow-delimiters treemacs-evil treemacs dashboard hydra general dracula-theme use-package))
+ '(python-indent-guess-indent-offset-verbose nil)
  '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
