@@ -27,6 +27,21 @@ paru woeusb-ng										# Ferramenta que permite criar bootável do Windows
 paru pass-git-helper							# Instala o gerenciador de senhas pass. Para informações de configuração: https://github.com/languitar/pass-git-helper
 paru github-cli										# Instala o controle do GitHub via linhas de comando. Para mais informações: https://github.com/cli/cli
 
+##################################################################################################
+
+## LEMBRETE IMPORTANTE: CONFIGURAR dnsmasq, dhcpdc e ufw
+
+# https://wiki.archlinux.org/title/NetworkManager
+# https://wiki.archlinux.org/title/Uncomplicated_Firewall
+
+# sudo ufw default deny incoming
+# sudo ufw default allow outgoing
+# sudo ufw allow ssh
+
+# Lembre de ativar o dnsmasq, o dhcpcd e o ufw com sudo systemctl enable e sudo systemctl restart
+
+##################################################################################################
+
 ## Configurações e plugins para o ZSH (créditos ao LuizOMF -> https://gist.github.com/luizomf/1fe6c67f307fc1df19e58f224134dc8f)
 chsh -s /bin/zsh
 zsh
@@ -75,8 +90,8 @@ using Pkg
 Pkg.add("IJulia")
 exit()
 
-## Instala o node.js e npm nas versões estáveis, além dos pacotes para de Language Server para HTML, CSS e JavaScript
+## Instala o node.js e npm nas versões estáveis, além dos pacotes para de Language Server para HTML, CSS, JavaScript e Bash
 nvm install --lts
 sudo npm install -g vscode-langservers-extracted
 sudo npm i -g typescript-language-server; npm i -g typescript
-
+sudo npm i -g bash-language-server

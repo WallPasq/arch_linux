@@ -68,7 +68,6 @@
 
 	;; Inicializa as configurações com base no que está no shell
 (use-package exec-path-from-shell
-	:ensure t
 	:init
 	(when (memq window-system '(mac ns x))
 		(exec-path-from-shell-initialize)))
@@ -98,14 +97,12 @@
 
 ;; Ajusta as cores dos brackets e também faz o pareamento automático deles
 (use-package rainbow-delimiters
-	:ensure t
  	:hook ((prog-mode . rainbow-delimiters-mode)
 				 (text-mode . rainbow-delimiters-mode)
          (shell-mode . rainbow-delimiters-mode)
          (eshell-mode . rainbow-delimiters-mode)))
 
 (use-package smartparens
-	:ensure t
 	:init (require 'smartparens-config)
 	:hook ((prog-mode . smartparens-mode)
 				 (text-mode . smartparens-mode)
@@ -141,9 +138,8 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3)
-	(which-key-mode))
-  
+  (setq which-key-idle-delay 0.3))
+
   ;; Insere a tecla ESC para cancelar
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
@@ -226,7 +222,6 @@
 
 ;; Instala e ativa o Treemacs no atalho Ctrl + \
 (use-package treemacs
-	:ensure t
 	:bind
 	(:map global-map
 					("C-\\" . treemacs)
@@ -235,18 +230,25 @@
 	(setq treemacs-is-never-other-window t))
 
 (use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
+  :after (treemacs evil))
 
-;; Instala o Eglot e o Corfu
-(use-package eglot)
-
-(defun dotfiles--lsp-deferred-if-supported ()
-  "Habilita o `eglot-ensure' somente nos modos em que ele tem suporte."
+;; Instala o LSP e o Corfu
+(use-package lsp-mode
+	:init
+	(setq lsp-keymap-prefix "C-c l")
+	(defun dotfiles--lsp-deferred-if-supported ()
+  "Habilita o `lsp-deferred' somente nos modos em que ele tem suporte."
   (unless (derived-mode-p 'emacs-lisp-mode)
-    (eglot-ensure)))
+    (lsp-deferred)))
+	(add-hook 'prog-mode-hook #'dotfiles--lsp-deferred-if-supported)
+	:bind
+	("C-c o" . lsp-org)
+	:hook
+	(lsp-mode . lsp-enable-which-key-integration)
+	:commands
+	(lsp lsp-deferred))
 
-(add-hook 'prog-mode-hook #'dotfiles--lsp-deferred-if-supported)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
 (use-package corfu
 	:custom
