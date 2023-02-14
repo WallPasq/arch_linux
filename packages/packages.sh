@@ -17,7 +17,7 @@ sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
 sudo pacman -S r									# Linguagem de progração R
 sudo pacman -S julia							# Linguagem de programação Julia
-paru brave-bin										# Navegador Brave
+paru google-chrome								# Navegador Google Chrome
 paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
 paru nvm													# Gerenciador de versões do node.js
 paru discord											# Aplicativo de comunicação voltado para comunidades
