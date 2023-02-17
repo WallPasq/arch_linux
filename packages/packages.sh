@@ -15,7 +15,7 @@ sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
 sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
-sudo pacman -S r									# Linguagem de progração R
+sudo pacman -S r tcl tk						# Linguagem de progração R
 sudo pacman -S julia							# Linguagem de programação Julia
 paru google-chrome								# Navegador Google Chrome
 paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
@@ -82,16 +82,22 @@ pip install JLDracula
 
 	## Caso o comando clear não esteja funcionando no ambiente conda, execute o comando abaixo
 sudo mv $CONDA_PREFIX/bin/clear $CONDA_PREFIX/bin/clear_old
-conda deactivate									# Desativa o ambiente conda
+conda deactivate																		# Desativa o ambiente conda
 
 ## Instala a linguagem Julia no jupyter notebook
-julia
+sudo julia
 using Pkg
 Pkg.add("IJulia")
 exit()
+
+## Instala o Language Server no R
+sudo R
+install.packages(“languageserver”)
+quit()
 
 ## Instala o node.js e npm nas versões estáveis, além dos pacotes para de Language Server para HTML, CSS, JavaScript e Bash
 nvm install --lts
 sudo npm install -g vscode-langservers-extracted
 sudo npm i -g typescript-language-server; npm i -g typescript
 sudo npm i -g bash-language-server
+sudo npm install -g live-server 

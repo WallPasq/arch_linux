@@ -14,8 +14,9 @@
 (scroll-bar-mode -1) 									       				; Remove a barra de rolagem
 (setq column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
 (column-number-mode t)											        ; Insere o número da coluna na modeline	
+(repeat-mode t) 							 											; Habilita a repetição atalhos (exemplo, C-x o para trocar de janela)
 (kill-buffer "*scratch*") 									        ; Para de criar um buffer scratch
- 
+
 ;; Ajustes nas performance de inicialização
 	;; Reduz a frequência de coleção de lixo
 (setq gc-cons-threshold (* 2 1000 1000))
@@ -142,6 +143,10 @@
 
   ;; Insere a tecla ESC para cancelar
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "M-]") 'shrink-window-horizontally)
+(global-set-key (kbd "M-[") 'enlarge-window-horizontally)
+(global-set-key (kbd "s-]") 'shrink-window)
+(global-set-key (kbd "s-[") 'enlarge-window)
 
 ;; Insere as configurações do Evil Mode (E*vim*l) no Emacs
 (defun evil-hook ()
