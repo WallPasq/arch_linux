@@ -17,11 +17,11 @@ sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
 sudo pacman -S r tcl tk						# Linguagem de progração R
 sudo pacman -S julia							# Linguagem de programação Julia
+sudo pacman -S obs-studio					# Programa de streaming e gravação Open Broadcaster Software
 paru google-chrome								# Navegador Google Chrome
 paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
 paru nvm													# Gerenciador de versões do node.js
 paru discord											# Aplicativo de comunicação voltado para comunidades
-paru telegram-desktop							# Serviço de mensagens instantâneas
 paru scrot												# Linha de comando que serve para capturar a tela
 paru woeusb-ng										# Ferramenta que permite criar bootável do Windows
 paru pass-git-helper							# Instala o gerenciador de senhas pass. Para informações de configuração: https://github.com/languitar/pass-git-helper
@@ -74,6 +74,7 @@ sudo conda install pandas							         			# Instala o pandas
 sudo conda install matplotlib					         			# Instala o matplotlib
 sudo conda install scipy							         			# Instala o scipy	
 sudo conda install scikit-learn				         			# Instala o scikit-learn
+sudo conda install nltk															# Instala o nltk
 sudo conda install flask							         			#	Instala o flask
 sudo conda update --all								         			# Atualiza todos os pacotes possíveis	
 
@@ -95,9 +96,9 @@ sudo R
 install.packages(“languageserver”)
 quit()
 
-## Instala o node.js e npm nas versões estáveis, além dos pacotes para de Language Server para HTML, CSS, JavaScript e Bash
-nvm install --lts
-sudo npm install -g vscode-langservers-extracted
-sudo npm i -g typescript-language-server; npm i -g typescript
-sudo npm i -g bash-language-server
-sudo npm install -g live-server 
+## Configurações do node.js e do npm
+nvm install --lts																								# Instala o node.js e o npm nas últimas versões estáveis
+sudo npm install -g vscode-langservers-extracted								# Instala o language server para HTML e CSS
+sudo npm i -g typescript-language-server; npm i -g typescript		# Instala o language server para JavaScript e TypeScript
+sudo npm i -g bash-language-server															# Instala o language server para Bash
+sudo npm install -g live-server																	# Instala o live server

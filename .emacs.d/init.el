@@ -6,6 +6,7 @@
 (setq auto-save-default nil)					       				; Remove o save automático
 (setq-default tab-width 2)						       				; Ajusta o tamanho da identação
 (setq-default cursor-type 'bar)				       				; Define o cursor como barra
+(set-face-attribute 'default nil :height 120)				; Define para iniciar com zoom 20%
 (blink-cursor-mode 0)									       				; Desabilita o pisca-pisca do cursor
 (tool-bar-mode -1)										       				; Remove a toolbar
 (tooltip-mode -1) 										       				; Remove as tooltips
@@ -93,7 +94,7 @@
 (use-package dracula-theme)
 (load-theme 'dracula t)
 
-;; Alerta quando algum comando gráfico for executado
+;; Alerta quando algum comando não for possível de ser executado
 (setq visible-bell t)
 
 ;; Ajusta as cores dos brackets e também faz o pareamento automático deles
@@ -141,7 +142,7 @@
   :config
   (setq which-key-idle-delay 0.3))
 
-  ;; Insere a tecla ESC para cancelar
+  ;; Insere a tecla ESC para cancelar, e atalhos para aumentar/diminuir a janela
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "M-]") 'shrink-window-horizontally)
 (global-set-key (kbd "M-[") 'enlarge-window-horizontally)
@@ -261,7 +262,7 @@
   (corfu-auto t)                 ; Habilita auto completar
   (corfu-quit-no-match nil)      ; Não sai, mesmo que não tenha nenhuma correspondência
   (corfu-on-exact-match nil)     ; Configura o tratamento de correspondências exatas
-  (corfu-scroll-margin 4)        ; Mostra as quatro pŕimeiras opções correspondentes
+  (corfu-scroll-margin 4)        ; Mostra as quatro primeiras opções correspondentes
 	:hook ((prog-mode . corfu-mode)
 				 (text-mode . corfu-mode)
          (shell-mode . corfu-mode)
