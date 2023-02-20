@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+# Coloque esse arquivo na pasta /usr/share/xsessions/
+# Put this file on directory /usr/share/xsessions/
+
+[Desktop Entry]
+Name=EXWM
+Comment=Emacs Window Manager
+Exec=sh ~/.emacs.d/exwm/start-exwm.sh
+TryExec=sh
+Type=Application
+X-SDDM-DesktopName=exwm
+DesktopNames=exwm

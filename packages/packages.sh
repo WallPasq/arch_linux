@@ -13,11 +13,22 @@ cd ..
 ## Instalação de pacotes
 sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
+sudo pacman -S pasystray					# System tray do Pavu Control
+sudo pacman -S pavucontrol				# Controlador de áudio Pavu Control
+sudo pacman -S dunst							# Programa de notificações Dunst
+sudo pacman -S feh								# Programa para manipulação de Wallpaper
+sudo pacman -S picom							# Compositor de tela Picom
+sudo pacman -S xss-lock slock			# Bloqueadores de tela
+sudo pacman -S alsa-utils					# Controla o volume
+sudo pacman -S brightnessctl			# Controla o brilho
+sudo pacman -S tlp								# Controle de Wi-Fi e Bluetooth
+sudo pacman -S playerctl					# Controle de música
 sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
 sudo pacman -S r tcl tk						# Linguagem de progração R
 sudo pacman -S julia							# Linguagem de programação Julia
 sudo pacman -S obs-studio					# Programa de streaming e gravação Open Broadcaster Software
+paru caffeine-ng									# Deixa a tela do computador ligada
 paru google-chrome								# Navegador Google Chrome
 paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
 paru nvm													# Gerenciador de versões do node.js
