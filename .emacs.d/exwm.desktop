@@ -1,12 +1,12 @@
 #!/usr/bin/env xdg-open
 
-# Coloque esse arquivo na pasta /usr/share/xsessions/
-# Put this file on directory /usr/share/xsessions/
+# Substitua /home/wallacy por sua pasta home, e coloque esse arquivo na pasta /usr/share/xsessions/
+# Replace /home/wallacy to your home directory, and put this file on directory /usr/share/xsessions/
 
 [Desktop Entry]
 Name=EXWM
 Comment=Emacs Window Manager
-Exec=sh ~/.emacs.d/exwm/start-exwm.sh
+Exec=sh /home/wallacy/.emacs.d/exwm/start-exwm.sh
 TryExec=sh
 Type=Application
 X-SDDM-DesktopName=exwm

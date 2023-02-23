@@ -1,11 +1,12 @@
 ;; -*- lexical-binding: t; -*-
 
 ;; Ajustes na inicialização do Emacs
-(setq native-comp-async-report-warnings-errors nil) ; Remove Warnings desnecessários
-(setq inhibit-startup-message t)			       				;	Remove a mensagem de boas-vindas
-(setq auto-save-default nil)					       				; Remove o save automático
-(setq-default tab-width 2)						       				; Ajusta o tamanho da identação
-(setq-default cursor-type 'bar)				       				; Define o cursor como barra
+(setq native-comp-async-report-warnings-errors nil  ; Remove Warnings desnecessários
+			inhibit-startup-message t											;	Remove a mensagem de boas-vindas
+			auto-save-default nil													; Remove o save automático
+			column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
+(setq-default tab-width 2														; Ajusta o tamanho da identação
+							cursor-type 'bar)				       				; Define o cursor como barra
 (set-face-attribute 'default nil :height 120)				; Define para iniciar com zoom 20%
 (blink-cursor-mode 0)									       				; Desabilita o pisca-pisca do cursor
 (tool-bar-mode -1)										       				; Remove a toolbar
@@ -13,7 +14,7 @@
 (set-fringe-mode 10) 									       				; Ajusta um "respiro" de 10 pixels nas bordas laterais
 (menu-bar-mode -1) 										       				; Remove a barra de menu
 (scroll-bar-mode -1) 									       				; Remove a barra de rolagem
-(setq column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
+(display-battery-mode 1)														; Mostra a bateria na modeline
 (column-number-mode t)											        ; Insere o número da coluna na modeline	
 (repeat-mode t) 							 											; Habilita a repetição atalhos (exemplo, C-x o para trocar de janela)
 (kill-buffer "*scratch*") 									        ; Para de criar um buffer scratch
@@ -34,11 +35,11 @@
 		     gcs-done)))
 
 ;; Melhora a rolagem (scroll) do mouse
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))	; Uma linha por vez
-(setq mouse-wheel-progressive-speed nil)						; Não acelera a rolagem
-(setq mouse-wheel-follow-mouse 't)									; Só rola na janela ativa
-(setq scroll-step 1)																; A rolagem pelo teclado acontece uma linha por vez
-(setq scroll-margin 7)															; Mostra as sete últimas linhas durante a rolagem
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))	; Uma linha por vez
+			mouse-wheel-progressive-speed nil							; Não acelera a rolagem
+			mouse-wheel-follow-mouse 't										; Só rola na janela ativa
+			scroll-step 1																	; A rolagem pelo teclado acontece uma linha por vez
+			scroll-margin 7)															; Mostra as sete últimas linhas durante a rolagem
 
 ;; Ajusta a transparência da janela e maximiza a janela por padrão
 (set-frame-parameter (selected-frame) 'alpha' (90 . 90))
@@ -52,27 +53,66 @@
       url-history-file (expand-file-name "url/history" user-emacs-directory)
       auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
 
-;; Inicializa as fontes do pacote
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-												 ("elpa" . "https://elpa.gnu.org/packages/")
-												 ("nongnu-elpa" . "https://elpa.nongnu.org/nongnu/")))
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+;; Instala e configura o Straight (gerenciador de pacotes)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-	;; Configurações do use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+	;; Desabilidade o package.el em favor do straight.el
+(setq package-enable-at-startup nil)
+
+(straight-use-package 'use-package)
+(use-package straight
+	:custom (straight-use-package-by-default t))
 
 	;; Inicializa as configurações com base no que está no shell
 (use-package exec-path-from-shell
 	:init
 	(when (memq window-system '(mac ns x))
 		(exec-path-from-shell-initialize)))
+
+;; Configurações do ibuffer
+(use-package ibuffer
+	:bind
+	("C-x C-b" . ibuffer))
+
+;; Ibuffer configuration
+(add-hook 'ibuffer-mode-hook (lambda () (ibuffer-auto-mode 1) (ibuffer-switch-to-saved-filter-groups "default")))
+(setq ibuffer-saved-filter-groups
+      '(("default"
+				 ("dired" (mode . dired-mode))
+				 ("browser" (or
+										 (name . "brave")
+										 (name . "chrome")
+										 (name . "firefox")))
+				 ("elisp" (mode . emacs-lisp-mode))
+				 ("org" (mode . org-mode))
+				 ("python" (mode . python-mode))
+				 ("web" (or
+								 (mode . html-mode)
+								 (mode . mhtml-mode)
+								 (mode . css-mode)
+								 (mode . js-mode)))
+				 ("bash" (mode . sh-mode))
+				 ("shell" (or
+									 (mode . ansi-term-mode)
+									 (mode . eshell-mode)
+									 (mode . term-mode)
+									 (mode . vterm-mode)
+									 (mode . shell-mode)))
+				 ("exwm" (mode . exwm-mode))
+				 ("dashboard" (mode . dashboard-mode))
+				 ("emacs" (name . "^[*].+[*]$"))))
+      ibuffer-show-empty-filter-groups nil)
 
 ;; Insere o número da linha
 (require 'display-line-numbers)
@@ -97,19 +137,146 @@
 ;; Alerta quando algum comando não for possível de ser executado
 (setq visible-bell t)
 
+;; Instala e configura o EXWM (Window Manager)
+
+	;; Coloca programas para rodar no background
+(defun run-in-background (command)
+	(let ((command-parts (split-string command "[ ]+")))
+		(apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+
+(run-in-background "pasystray")		;; System tray do Pavu Control
+(run-in-background "nm-applet")		;; Permite acesso ao Network Manager
+(run-in-background "dunst")				;; Programa de notificações
+(run-in-background "caffeine")		;; Deixa a tela do computador ligada
+
+	;; Transforma o workspace 0 no primário
+(defun exwm-init-hook ()
+	(exwm-workspace-switch-create 0))
+
+	;; Renomeia o buffer com a classe dele
+(defun exwm-update-class ()
+	(exwm-workspace-rename-buffer exwm-class-name))
+
+	;; Renomeia os browsers com seus títulos
+(defun exwm-update-title ()
+	(pcase exwm-class-name
+		("Google-chrome" (exwm-workspace-rename-buffer (format "%s" exwm-title)))
+		("firefox" (exwm-workspace-rename-buffer (format "%s" exwm-title)))))
+
+	;; Configurações da Window Manager
+(use-package exwm
+	:config
+	
+	;; Criar 5 workspaces por padrão
+	(setq exwm-workspace-number 5)
+
+	;; Aplicando as funções criadas anteriormente
+	(add-hook 'exwm-update-class-hook #'exwm-update-class)
+	(add-hook 'exwm-update-title-hook #'exwm-update-title)
+	(add-hook 'exwm-init-hook #'exwm-init-hook)
+
+	;; Define a resolução da tela
+	(require 'exwm-randr)
+	(setq exwm-randr-workspace-output-plist '(0 "eDP-1"))
+	(add-hook 'exwm-randr-screen-change-hook
+						(lambda ()
+							(start-process-shell-command
+							 "xrandr" nil "xrandr --output HDMI-1 --left-of eDP-1 --auto")))
+	(setq exwm-randr-workspace-monitor-plist '(1 "HDMI-1" 3 "HDMI-1" 5 "HDMI-1"
+																						 7 "HDMI-1" 9 "HDMI-1"))
+	(exwm-randr-enable)
+	
+	;; Define o Wallpaper
+	(defun set-wallpaper ()
+		(interactive)
+		(start-process-shell-command "feh" nil "feh --bg-fill ~/Wallpaper/.Wallpaper.jpg"))
+	(set-wallpaper)
+	
+	;; Configurações do System tray
+	(require 'exwm-systemtray)
+	(setq exwm-systemtray-height 16)
+	(exwm-systemtray-enable)
+	
+	;; As keybings abaixo rodarão obrigatoriamente nos buffers do Emacs
+	(setq exwm-input-prefix-keys
+				'(?\C-x
+					?\C-u
+					?\C-h
+					?\C-w
+					?\M-x
+					?\M-`
+					?\M-&
+					?\M-:
+					?\C-\M-j
+					?\C-\ ))
+
+	;; C-q é habilitado para os atalhos dos softwares além do Emacs
+	(define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+	;; Define o Windows Espaço para lançar aplicativos
+	(exwm-input-set-key (kbd "s-SPC") 'app-launcher-run-app)
+	
+	;; Define atalhos globais para o EXWM
+	(setq exwm-input-global-keys
+				`(
+					([?\s-r] . exwm-reset)
+					([?\s-&] . (lambda (command)
+										 (interactive (list (read-shell-command "$ ")))
+										 (start-process-shell-command command nil command)))
+					([?\s-w] . exwm-workspace-switch)
+					,@(mapcar (lambda (i)
+											`(,(kbd (format "s-%d" i)) .
+												(lambda ()
+												(interactive)
+												(exwm-workspace-switch-create ,i))))
+										(number-sequence 0 9))))
+
+	(exwm-enable))
+
+;; Configurações do DE (Desktop Environment)
+(use-package desktop-environment
+	:after exwm
+	:config
+	(exwm-input-set-key (kbd "s-.") 'desktop-environment-brightness-increment)
+	(exwm-input-set-key (kbd "s->") 'desktop-environment-brightness-increment-slowly)
+	(exwm-input-set-key (kbd "s-,") 'desktop-environment-brightness-decrement)
+	(exwm-input-set-key (kbd "s-<") 'desktop-environment-brightness-decrement-slowly)
+	(exwm-input-set-key (kbd "s-m") 'desktop-environment-toggle-music)
+	(exwm-input-set-key (kbd "s-s") 'desktop-environment-screenshot)
+	(exwm-input-set-key (kbd "s-S") 'desktop-environment-screenshot-part)
+	(exwm-input-set-key (kbd "s-l") 'desktop-environment-screenlock-command)
+	:custom
+	(desktop-environment-brightness-small-increment "1%+")
+	(desktop-environment-brightness-small-decrement "1%-")
+	(desktop-environment-brightness-normal-increment "5%+")
+	(desktop-environment-brightness-normal-decrement "5%-")
+	(desktop-environment-volume-small-increment "1%+")
+	(desktop-environment-volume-small-decrement "1%-")
+	(desktop-environment-volume-normal-increment "5%+")
+	(desktop-environment-volume-normal-decrement "5%-")
+	:init
+	(desktop-environment-mode))
+
+;; Habilita o TRAMP para fazer conexões SSH
+(setq tramp-default-method "ssh")
+
 ;; Ajusta as cores dos brackets e também faz o pareamento automático deles
 (use-package rainbow-delimiters
- 	:hook ((prog-mode . rainbow-delimiters-mode)
+	:hook ((prog-mode . rainbow-delimiters-mode)
 				 (text-mode . rainbow-delimiters-mode)
-         (shell-mode . rainbow-delimiters-mode)
-         (eshell-mode . rainbow-delimiters-mode)))
+				 (org-mode . rainbow-delimiters-mode)))
 
 (use-package smartparens
 	:init (require 'smartparens-config)
 	:hook ((prog-mode . smartparens-mode)
 				 (text-mode . smartparens-mode)
-         (shell-mode . smartparens-mode)
-         (eshell-mode . smartparens-mode)))
+         (org-mode . smartparens-mode)))
+
+;; Instala e configura o Pinentry
+(use-package pinentry
+	:config
+	(setq epg-pinentry-mode 'loopback))
+(pinentry-start)
 
 ;; Habilita para o Emacs reconhecer o Unicode
   ;; Ativa o suporte adequado aos caracteres Unicode
@@ -122,20 +289,7 @@
     (setf (cdr (nth block-idx unicode-fonts-block-font-mapping))
           `(,updated-block))))
           
-;; Instalação e configuração do general.el (key bindings)
-(use-package general
-  :config
-  (general-evil-setup t)
-
-  (general-create-definer leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (general-create-definer c-keys
-    :prefix "C-c"))
-
-  ;; Instalação e configuração do which-key (mostra as key bindings disponíveis)
+;; Instalação e configuração do which-key (mostra as key bindings disponíveis)
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
@@ -158,12 +312,12 @@
 
 (use-package evil
   :init
-	(setq evil-want-keybinding nil)
-  (setq evil-want-C-i-jump nil)
-	(setq evil-want-integration t)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-respect-visual-line-mode t)
-  (setq evil-move-beyond-eol t)
+	(setq evil-want-keybinding nil
+				evil-want-C-i-jump t
+				evil-want-integration t
+				evil-want-C-u-scroll t
+				evil-respect-visual-line-mode t
+				evil-move-beyond-eol t)
   :config
   (add-hook 'evil-mode-hook 'evil-hook)
   (evil-mode 1)
@@ -174,7 +328,6 @@
 	;; j para próxima linha e k para linha anterior
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal))
   
@@ -186,6 +339,9 @@
   :config
   (evil-collection-init))
 
+(use-package evil-nerd-commenter
+	:bind ("C-;" . evilnc-comment-or-uncomment-lines))
+
 ;; Hydra
 (use-package hydra
   :defer 1)
@@ -193,14 +349,20 @@
 ;; Configurações do dashboard
 (use-package dashboard
 	:config
-	(setq dashboard-banner-logo-title "Welcome to Emacs, Wallacy")
-	(setq dashboard-startup-banner 'logo)
-	(setq dashboard-set-init-info t)
-	(setq dashboard-center-content t)
-	(setq dashboard-items '((recents . 10)
+	(setq dashboard-banner-logo-title "Welcome to Emacs, Wallacy"
+				dashboard-startup-banner 'logo
+				dashboard-set-init-info t
+				dashboard-center-content t
+				dashboard-items '((recents . 10)
 													(agenda . 15)
 													(bookmarks . 5)))
 	(dashboard-setup-startup-hook))
+
+;; Habilita data e horário na modeline
+(setq display-time-format "%H:%M %d/%m/%Y"
+      displat-time-default-load-average nil
+      display-time-day-and-date t)
+(display-time-mode 1)
 
 ;; Instala e ativa o Doom Modeline
 (use-package all-the-icons)      
@@ -257,39 +419,126 @@
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
 (use-package corfu
+	:config
+	(setq corfu-popupinfo-delay t)
 	:custom
 	(corfu-cycle t)                ; Habilita o circuito de `corfu-next/previous'
   (corfu-auto t)                 ; Habilita auto completar
   (corfu-quit-no-match nil)      ; Não sai, mesmo que não tenha nenhuma correspondência
   (corfu-on-exact-match nil)     ; Configura o tratamento de correspondências exatas
   (corfu-scroll-margin 4)        ; Mostra as quatro primeiras opções correspondentes
-	:hook ((prog-mode . corfu-mode)
-				 (text-mode . corfu-mode)
-         (shell-mode . corfu-mode)
-         (eshell-mode . corfu-mode))
-  :init
-  (global-corfu-mode))
+	:init
+  (global-corfu-mode)
+	(corfu-popupinfo-mode))
 
 (use-package emacs
   :init
-  (setq completion-cycle-threshold 3)	; Habilita o ciclo TAB se houver poucos candidatos
-  (setq tab-always-indent 'complete))
+  (setq completion-cycle-threshold 3	; Habilita o ciclo TAB se houver poucos candidatos
+				tab-always-indent 'complete))
 
-;; Configurações padrão do use-package (vem com a instalação do mesmo)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-	 '("12e12c708b0d968868435a6f1197d6e8e51828338566593a28804644c80f0c03" "9e721e03b78de19b5f5cbdb877de134d862f40a907e96964c4729658d1c6d94b" "21d7f1c3389d76b199fed33989fc7e13139c66e183436894a0f22aba82ff17c6" "7c284f499a1be8fcf465458f5250442ecbb26ce2fd8108abc89b241c93350004" default))
- '(package-selected-packages
-	 '(smartparens rainbow-delimiters treemacs-evil treemacs dashboard hydra general dracula-theme use-package))
- '(python-indent-guess-indent-offset-verbose nil)
- '(warning-suppress-types '((use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Instala e configura o Vertico
+(defun minibuffer-backward-kill (arg)
+  "Se o minibuffer está completando o nome do arquivo, deleta a pasta pai, se não deleta a palavra"
+  (interactive "p")
+  (if minibuffer-completing-file-name
+      ;; Inspirado em https://github.com/raxod502/selectrum/issues/498#issuecomment-803283608
+      (if (string-match-p "/." (minibuffer-contents))
+          (zap-up-to-char (- arg) ?/)
+        (delete-minibuffer-contents))
+      (delete-word (- arg))))
+
+(use-package vertico
+	:init
+	(vertico-mode)
+	(setq vertico-count 10
+				vertico-resize t
+				vertico-cycle t)
+	:bind
+	(:map vertico-map
+				("C-j" . vertico-next)
+				("C-k" . vertico-previous)
+	 :map minibuffer-local-map
+				("M-h" . minibuffer-backward-kill)))
+
+;; Instala e configura o Marginalia
+(use-package marginalia
+	:init
+	(marginalia-mode))
+
+;; Instala e configura o Orderless
+(use-package orderless
+	:init
+	(setq completion-styles '(orderless)
+				completion-category-defaults nil
+				completion-category-overrides '((file (styles . (partial-completion))))))
+
+;; Instala e configura o Consult
+(use-package consult
+	:bind
+	(("C-s" . consult-line)
+	 ("C-M-l" . consult-imenu)
+	 :map minibuffer-local-map
+	 ("C-r" . consult-history))
+	:custom
+	(completion-in-region-function #'consult-completion-in-region))
+
+(use-package consult-dir
+	:bind
+	(("C-x C-d" . consult-dir)
+	 :map vertico-map
+	 ("C-x C-d" . consult-dir)
+	 ("C-x C-j" . consult-dir-jump-file)))
+
+;; Instala e configura o app-launcher
+(use-package app-launcher
+  :straight '(app-launcher :host github :repo "SebastienWae/app-launcher"))
+
+;; Configurações do Dired
+(use-package dired
+	:ensure nil
+	:straight nil
+	:defer 1
+	:commands (dired dired-jump)
+	:config
+	(setq dired-listing-switches "-agho --group-directories-first"
+				dired-omit-files "^\\.[^.].*"
+				diret-omit-verbose nil))
+
+(autoload 'dired-omit-mode "dired-x")
+
+(add-hook 'dired-mode-hook
+					(lambda ()
+						(interactive)
+						(dired-omit-mode 1)))
+
+(use-package all-the-icons-dired)
+(add-hook 'dired-mode-hook
+					(lambda ()
+						(interactive)
+						(all-the-icons-dired-mode 1)
+						(hl-line-mode 1)))
+
+(add-hook 'dired-load-hook
+					(lambda ()
+						(interactive)
+						(dired-collapse)))
+
+(use-package dired-single
+	:commands (dired dired-jump)
+	:defer t)
+
+(use-package dired-ranger
+	:defer t)
+
+(use-package dired-collapse
+	:defer t)
+
+	;; Key Bindings
+(evil-collection-define-key 'normal 'dired-mode-map
+	"h" 'dired-single-up-directory
+	"H" 'dired-omit-mode
+	"l" 'dired-single-buffer
+	"y" 'dired-ranger-copy
+	"n" 'dired-ranger-move
+	"p" 'dired-ranger-paste)
+
