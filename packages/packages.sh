@@ -12,6 +12,7 @@ cd ..
 
 ## Instalação de pacotes
 sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
+sudo pacman -S qt5ct							# Permite trocar o tema e os ícones do qt
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
 sudo pacman -S pasystray					# System tray do Pavu Control
 sudo pacman -S pavucontrol				# Controlador de áudio Pavu Control
@@ -74,6 +75,28 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 mkdir -p ~/.fonts
 git clone https://github.com/pdf/ubuntu-mono-powerline-ttf.git ~/.fonts/ubuntu-mono-powerline-ttf
 fc-cache -vf
+
+## Instala o tema do Dracula no GTK e no QT
+
+	## Instalação no GTK
+cd /usr/share/themes/
+sudo curl -LO https://github.com/dracula/gtk/archive/master.zip
+sudo unzip master.zip
+sudo rm -rf master.zip
+cd ~
+gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
+gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
+cd /usr/share/icons
+sudo curl -LO https://github.com/dracula/gtk/files/5214870/Dracula.zip
+sudo unzip Dracula.zip
+sudo rm -rf Dracula.zip
+cd ~
+gsettings set org.gnome.desktop.interface icon-theme "Dracula"
+
+	## Instalaçao no QT
+git clone https://github.com/dracula/qt5.git
+sudo cp ~/qt5/Dracula.conf ~/.config/qt5ct/colors/
+qt5ct		## Este comando abrirá o painel do qt5ct, aí basta escolher a fonte e os ícones do Dracula
 
 ## Configuração do miniconda3
 conda activate base																	# Ativa o ambiente conda

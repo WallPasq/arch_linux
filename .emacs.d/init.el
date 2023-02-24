@@ -7,7 +7,6 @@
 			column-number-indicator-zero-based nil)     	; Garante que a coluna comece a contar do 1, ao invés do 0
 (setq-default tab-width 2														; Ajusta o tamanho da identação
 							cursor-type 'bar)				       				; Define o cursor como barra
-(set-face-attribute 'default nil :height 120)				; Define para iniciar com zoom 20%
 (blink-cursor-mode 0)									       				; Desabilita o pisca-pisca do cursor
 (tool-bar-mode -1)										       				; Remove a toolbar
 (tooltip-mode -1) 										       				; Remove as tooltips
@@ -186,11 +185,12 @@
 																						 7 "HDMI-1" 9 "HDMI-1"))
 	(exwm-randr-enable)
 	
-	;; Define o Wallpaper
-	(defun set-wallpaper ()
-		(interactive)
-		(start-process-shell-command "feh" nil "feh --bg-fill ~/Wallpaper/.Wallpaper.jpg"))
-	(set-wallpaper)
+		;; Define o Wallpaper
+	(use-package wallpaper
+		:hook ((exwm-randr-screen-change . wallpaper-set-wallpaper)
+					 (after-init . wallpaper-cycle-mode))
+		:custom ((wallpaper-cycle-single t)
+						 (wallpaper-cycle-directory "~/Wallpaper/")))
 	
 	;; Configurações do System tray
 	(require 'exwm-systemtray)
@@ -245,6 +245,10 @@
 	(exwm-input-set-key (kbd "s-s") 'desktop-environment-screenshot)
 	(exwm-input-set-key (kbd "s-S") 'desktop-environment-screenshot-part)
 	(exwm-input-set-key (kbd "s-l") 'desktop-environment-screenlock-command)
+  (exwm-input-set-key (kbd "M-]") 'exwm-layout-shrink-window-horizontally)
+  (exwm-input-set-key (kbd "M-[") 'exwm-layout-enlarge-window-horizontally)
+  (exwm-input-set-key (kbd "s-]") 'exwm-layout-shrink-window)
+  (exwm-input-set-key (kbd "s-[") 'exwm-layout-enlarge-window)
 	:custom
 	(desktop-environment-brightness-small-increment "1%+")
 	(desktop-environment-brightness-small-decrement "1%-")
@@ -296,12 +300,8 @@
   :config
   (setq which-key-idle-delay 0.3))
 
-  ;; Insere a tecla ESC para cancelar, e atalhos para aumentar/diminuir a janela
+  ;; Insere a tecla ESC para cancelar
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "M-]") 'shrink-window-horizontally)
-(global-set-key (kbd "M-[") 'enlarge-window-horizontally)
-(global-set-key (kbd "s-]") 'shrink-window)
-(global-set-key (kbd "s-[") 'enlarge-window)
 
 ;; Insere as configurações do Evil Mode (E*vim*l) no Emacs
 (defun evil-hook ()
