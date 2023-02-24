@@ -12,7 +12,7 @@ cd ..
 
 ## Instalação de pacotes
 sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
-sudo pacman -S qt5ct							# Permite trocar o tema e os ícones do qt
+sudo pacman -S qt5ct gnome-tweaks	# Permite trocar o tema e os ícones do QT e do GTK
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
 sudo pacman -S pasystray					# System tray do Pavu Control
 sudo pacman -S pavucontrol				# Controlador de áudio Pavu Control
@@ -96,7 +96,20 @@ gsettings set org.gnome.desktop.interface icon-theme "Dracula"
 	## Instalaçao no QT
 git clone https://github.com/dracula/qt5.git
 sudo cp ~/qt5/Dracula.conf ~/.config/qt5ct/colors/
+sudo cp ~/qt5/Dracula.conf /usr/share/qt5ct/colors/
+
+	## Agora é necessário editar o arquivo /etc/environment
+sudoedit /etc/environment
+QT_QPA_PLATFORMTHEME=qt5ct		# Adicione essa linha ao final do arquivo e salve o mesmo
+
+	## Reinicie o sistema e dê o seguinte comando
 qt5ct		## Este comando abrirá o painel do qt5ct, aí basta escolher a fonte e os ícones do Dracula
+
+	## Agora é necessário editar o arquivo /usr/bin/gnome-tweaks
+sudoedit /usr/bin/gnome-tweaks
+#!/usr/bin/python3 ## Troque a primeira linha do arquivo por essa, para que ele funcione devidamente
+
+gnome-tweaks ## Este comando abrirá o painel do gnome-tweaks, aí basta escolher a fonte e os ícones do Dracula
 
 ## Configuração do miniconda3
 conda activate base																	# Ativa o ambiente conda
