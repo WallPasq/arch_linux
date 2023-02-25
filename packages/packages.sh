@@ -12,7 +12,7 @@ cd ..
 
 ## Instalação de pacotes
 sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
-sudo pacman -S qt5ct gnome-tweaks	# Permite trocar o tema e os ícones do QT e do GTK
+sudo pacman -S qt5ct							# Permite trocar o tema e os ícones do GTK
 sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
 sudo pacman -S pasystray					# System tray do Pavu Control
 sudo pacman -S pavucontrol				# Controlador de áudio Pavu Control
@@ -82,6 +82,7 @@ fc-cache -vf
 cd /usr/share/themes/
 sudo curl -LO https://github.com/dracula/gtk/archive/master.zip
 sudo unzip master.zip
+sudo mv gtk-master/ Dracula/
 sudo rm -rf master.zip
 cd ~
 gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
@@ -105,11 +106,9 @@ QT_QPA_PLATFORMTHEME=qt5ct		# Adicione essa linha ao final do arquivo e salve o 
 	## Reinicie o sistema e dê o seguinte comando
 qt5ct		## Este comando abrirá o painel do qt5ct, aí basta escolher a fonte e os ícones do Dracula
 
-	## Agora é necessário editar o arquivo /usr/bin/gnome-tweaks
-sudoedit /usr/bin/gnome-tweaks
-#!/usr/bin/python3 ## Troque a primeira linha do arquivo por essa, para que ele funcione devidamente
-
-gnome-tweaks ## Este comando abrirá o painel do gnome-tweaks, aí basta escolher a fonte e os ícones do Dracula
+	## Atualização dos arquivos do GTK
+sudo nano /usr/share/gtk-3.0/settings.ini		# Troque os temas Adwaita por Dracula
+sudo nano /usr/share/gtk-4.0/settings.ini		# Troque os temas Adwaita por Dracula
 
 ## Configuração do miniconda3
 conda activate base																	# Ativa o ambiente conda
