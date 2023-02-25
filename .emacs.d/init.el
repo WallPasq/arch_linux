@@ -41,8 +41,8 @@
 			scroll-margin 7)															; Mostra as sete últimas linhas durante a rolagem
 
 ;; Ajusta a transparência da janela e maximiza a janela por padrão
-(set-frame-parameter (selected-frame) 'alpha' (90 . 90))
-	(add-to-list 'default-frame-alist' (alpha . (90 . 90)))
+(set-frame-parameter (selected-frame) 'alpha' (98 . 98))
+	(add-to-list 'default-frame-alist' (alpha . (98 . 98)))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 	(add-to-list 'default-frame-alist' (fullscreen . maximized))
 
@@ -431,10 +431,29 @@
   (global-corfu-mode)
 	(corfu-popupinfo-mode))
 
+;; Habilita para o Emacs seguir a nova janela quando ela for criada
+
+	;; Função para seguir a nova janela criada horizontalmente
+(defun split-and-follow-horizontally ()
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+
+	;; Função para seguir a nova janela criada verticalmente
+(defun split-and-follow-vertically ()
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+
 (use-package emacs
   :init
   (setq completion-cycle-threshold 3	; Habilita o ciclo TAB se houver poucos candidatos
-				tab-always-indent 'complete))
+				tab-always-indent 'complete)
+	:bind (:map ctl-x-map
+							("2" . split-and-follow-horizontally)
+							("3" . split-and-follow-vertically)))
 
 ;; Instala e configura o Vertico
 (defun minibuffer-backward-kill (arg)
