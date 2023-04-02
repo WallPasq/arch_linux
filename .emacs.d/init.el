@@ -431,29 +431,13 @@
   (global-corfu-mode)
 	(corfu-popupinfo-mode))
 
-;; Habilita para o Emacs seguir a nova janela quando ela for criada
-
-	;; Função para seguir a nova janela criada horizontalmente
-(defun split-and-follow-horizontally ()
-  (interactive)
-  (split-window-below)
-  (balance-windows)
-  (other-window 1))
-
-	;; Função para seguir a nova janela criada verticalmente
-(defun split-and-follow-vertically ()
-  (interactive)
-  (split-window-right)
-  (balance-windows)
-  (other-window 1))
-
 (use-package emacs
   :init
   (setq completion-cycle-threshold 3	; Habilita o ciclo TAB se houver poucos candidatos
-				tab-always-indent 'complete)
-	:bind (:map ctl-x-map
-							("2" . split-and-follow-horizontally)
-							("3" . split-and-follow-vertically)))
+				tab-always-indent 'complete))
+
+;; Instala o go-mode para a linguagem Go
+(use-package go-mode)
 
 ;; Instala e configura o Vertico
 (defun minibuffer-backward-kill (arg)

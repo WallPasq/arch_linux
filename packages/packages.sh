@@ -28,7 +28,9 @@ sudo pacman -S firefox						# Navegador Firefox
 sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
 sudo pacman -S r tcl tk						# Linguagem de progração R
 sudo pacman -S julia							# Linguagem de programação Julia
+sudo pacman -S go									# Linguagem de programação Go
 sudo pacman -S obs-studio					# Programa de streaming e gravação Open Broadcaster Software
+sudo pacman -S rclone							# Programa para configurar acesso à cloud (ex.: Google Drive)
 paru caffeine-ng									# Deixa a tela do computador ligada
 paru google-chrome								# Navegador Google Chrome
 paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
@@ -116,6 +118,7 @@ sudo conda install -c conda-forge python-lsp-server # Instala o Language Server 
 sudo conda install jupyter 													# Instala o jupyter notebook
 sudo conda install r r-irkernel				         			# Instala o R no jupyter notebook
 sudo conda install numpy							         			# Instala o numpy
+sudo conda install openpyxl													# Permite a manipulação de arquivos do Excel
 sudo conda install pandas							         			# Instala o pandas
 sudo conda install matplotlib					         			# Instala o matplotlib
 sudo conda install scipy							         			# Instala o scipy	
@@ -141,6 +144,9 @@ exit()
 sudo R
 install.packages(“languageserver”)
 quit()
+
+## Instala o Language Server no Go
+go install golang.org/x/tools/gopls@latest
 
 ## Configurações do node.js e do npm
 nvm install --lts																								# Instala o node.js e o npm nas últimas versões estáveis
