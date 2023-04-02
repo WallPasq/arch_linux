@@ -122,6 +122,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Configurações da linguagem Go
+# Go language environment variables
 export GOPATH="$(go env GOPATH)"
 export PATH="${PATH}:${GOPATH}/bin"
