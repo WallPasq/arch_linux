@@ -439,6 +439,10 @@
 ;; Instala o go-mode para a linguagem Go
 (use-package go-mode)
 
+;; Instala o julia-mode e o lsp-julia para a linguagem Julia
+(use-package julia-mode)
+(use-package lsp-julia)
+
 ;; Instala e configura o Vertico
 (defun minibuffer-backward-kill (arg)
   "Se o minibuffer está completando o nome do arquivo, deleta a pasta pai, se não deleta a palavra"
