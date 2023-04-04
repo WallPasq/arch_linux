@@ -30,7 +30,7 @@ sudo pacman -S r tcl tk gcc-fortran	# Linguagem de progração R
 sudo pacman -S julia								# Linguagem de programação Julia
 sudo pacman -S go										# Linguagem de programação Go
 sudo pacman -S obs-studio						# Programa de streaming e gravação Open Broadcaster Software
-sudo pacman -S rclone								# Programa para configurar acesso à cloud (ex.: Google Drive)
+sudo pacman -S rclone fuse3					# Programa para configurar acesso à cloud (ex.: Google Drive)
 paru caffeine-ng										# Deixa a tela do computador ligada
 paru google-chrome									# Navegador Google Chrome
 paru miniconda3											# Versão simplificada do conda, gerenciador de ambientes do Python
@@ -114,6 +114,7 @@ sudo nano /usr/share/gtk-4.0/settings.ini		# Troque os temas Adwaita por Dracula
 
 ## Configuração do miniconda3
 conda activate base																	# Ativa o ambiente conda
+conda config --set auto_activate_base false					# Impede que o conda inicie o ambiente base automaticamente
 sudo conda install -c conda-forge python-lsp-server # Instala o Language Server Protocol para a linguagem Python
 sudo conda install jupyter 													# Instala o jupyter notebook
 sudo conda install -c conda-forge jupyterlab-lsp		# Instala o Language Server Protocol no jupyter lab
@@ -125,7 +126,6 @@ sudo conda install scipy							         			# Instala o scipy
 sudo conda install scikit-learn				         			# Instala o scikit-learn
 sudo conda install nltk															# Instala o nltk
 sudo conda install flask							         			#	Instala o flask
-sudo conda update --all								         			# Atualiza todos os pacotes possíveis	
 
 	## Instala o tema Dracula no Jupyter Lab
 pip install JLDracula
