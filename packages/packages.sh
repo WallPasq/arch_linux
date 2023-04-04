@@ -11,35 +11,35 @@ makepkg -si
 cd ..
 
 ## Instalação de pacotes
-sudo pacman -S emacs-nativecomp		# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
-sudo pacman -S qt5ct							# Permite trocar o tema e os ícones do GTK
-sudo pacman -S zsh								# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
-sudo pacman -S pasystray					# System tray do Pavu Control
-sudo pacman -S pavucontrol				# Controlador de áudio Pavu Control
-sudo pacman -S dunst							# Programa de notificações Dunst
-sudo pacman -S feh								# Programa para manipulação de Wallpaper
-sudo pacman -S picom							# Compositor de tela Picom
-sudo pacman -S xss-lock slock			# Bloqueadores de tela
-sudo pacman -S alsa-utils					# Controla o volume
-sudo pacman -S brightnessctl			# Controla o brilho
-sudo pacman -S tlp								# Controle de Wi-Fi e Bluetooth
-sudo pacman -S playerctl					# Controle de música
-sudo pacman -S firefox						# Navegador Firefox
-sudo pacman -S unzip zip gzip tar	# Permitem compactar e descompactar arquivos
-sudo pacman -S r tcl tk						# Linguagem de progração R
-sudo pacman -S julia							# Linguagem de programação Julia
-sudo pacman -S go									# Linguagem de programação Go
-sudo pacman -S obs-studio					# Programa de streaming e gravação Open Broadcaster Software
-sudo pacman -S rclone							# Programa para configurar acesso à cloud (ex.: Google Drive)
-paru caffeine-ng									# Deixa a tela do computador ligada
-paru google-chrome								# Navegador Google Chrome
-paru miniconda3										# Versão simplificada do conda, gerenciador de ambientes do Python
-paru nvm													# Gerenciador de versões do node.js
-paru discord											# Aplicativo de comunicação voltado para comunidades
-paru scrot												# Linha de comando que serve para capturar a tela
-paru woeusb-ng										# Ferramenta que permite criar bootável do Windows
-paru pass-git-helper							# Instala o gerenciador de senhas pass. Para informações de configuração: https://github.com/languitar/pass-git-helper
-paru github-cli										# Instala o controle do GitHub via linhas de comando. Para mais informações: https://github.com/cli/cli
+sudo pacman -S emacs-nativecomp			# Meu editor de texto (obs.: as configurações do emacs estão em .emacs.d/init.el)
+sudo pacman -S qt5ct								# Permite trocar o tema e os ícones do GTK
+sudo pacman -S zsh									# Meu shell (as configurações do ZSH estão em zsh/.zshrc)
+sudo pacman -S pasystray						# System tray do Pavu Control
+sudo pacman -S pavucontrol					# Controlador de áudio Pavu Control
+sudo pacman -S dunst								# Programa de notificações Dunst
+sudo pacman -S feh									# Programa para manipulação de Wallpaper
+sudo pacman -S picom								# Compositor de tela Picom
+sudo pacman -S xss-lock slock				# Bloqueadores de tela
+sudo pacman -S alsa-utils						# Controla o volume
+sudo pacman -S brightnessctl				# Controla o brilho
+sudo pacman -S tlp									# Controle de Wi-Fi e Bluetooth
+sudo pacman -S playerctl						# Controle de música
+sudo pacman -S firefox							# Navegador Firefox
+sudo pacman -S unzip zip gzip tar		# Permitem compactar e descompactar arquivos
+sudo pacman -S r tcl tk gcc-fortran	# Linguagem de progração R
+sudo pacman -S julia								# Linguagem de programação Julia
+sudo pacman -S go										# Linguagem de programação Go
+sudo pacman -S obs-studio						# Programa de streaming e gravação Open Broadcaster Software
+sudo pacman -S rclone								# Programa para configurar acesso à cloud (ex.: Google Drive)
+paru caffeine-ng										# Deixa a tela do computador ligada
+paru google-chrome									# Navegador Google Chrome
+paru miniconda3											# Versão simplificada do conda, gerenciador de ambientes do Python
+paru nvm														# Gerenciador de versões do node.js
+paru discord												# Aplicativo de comunicação voltado para comunidades
+paru scrot													# Linha de comando que serve para capturar a tela
+paru woeusb-ng											# Ferramenta que permite criar bootável do Windows
+paru pass-git-helper								# Instala o gerenciador de senhas pass. Para informações de configuração: https://github.com/languitar/pass-git-helper
+paru github-cli											# Instala o controle do GitHub via linhas de comando. Para mais informações: https://github.com/cli/cli
 
 ##################################################################################################
 
@@ -116,7 +116,7 @@ sudo nano /usr/share/gtk-4.0/settings.ini		# Troque os temas Adwaita por Dracula
 conda activate base																	# Ativa o ambiente conda
 sudo conda install -c conda-forge python-lsp-server # Instala o Language Server Protocol para a linguagem Python
 sudo conda install jupyter 													# Instala o jupyter notebook
-sudo conda install r r-irkernel				         			# Instala o R no jupyter notebook
+sudo conda install -c conda-forge jupyterlab-lsp		# Instala o Language Server Protocol no jupyter lab
 sudo conda install numpy							         			# Instala o numpy
 sudo conda install openpyxl													# Permite a manipulação de arquivos do Excel
 sudo conda install pandas							         			# Instala o pandas

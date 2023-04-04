@@ -443,6 +443,9 @@
 (use-package julia-mode)
 (use-package lsp-julia)
 
+;; Instala o ESS para a linguagem R
+(use-package ess)
+
 ;; Instala e configura o Vertico
 (defun minibuffer-backward-kill (arg)
   "Se o minibuffer está completando o nome do arquivo, deleta a pasta pai, se não deleta a palavra"
