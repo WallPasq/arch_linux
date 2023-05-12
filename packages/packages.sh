@@ -35,6 +35,7 @@ paru caffeine-ng										# Deixa a tela do computador ligada
 paru google-chrome									# Navegador Google Chrome
 paru miniconda3											# Versão simplificada do conda, gerenciador de ambientes do Python
 paru nvm														# Gerenciador de versões do node.js
+paru rstudio-desktop-bin						# Instala o RStudio (IDE voltada para execução de scripts R)
 paru discord												# Aplicativo de comunicação voltado para comunidades
 paru scrot													# Linha de comando que serve para capturar a tela
 paru woeusb-ng											# Ferramenta que permite criar bootável do Windows
@@ -111,6 +112,11 @@ qt5ct		## Este comando abrirá o painel do qt5ct, aí basta escolher a fonte e o
 	## Atualização dos arquivos do GTK
 sudo nano /usr/share/gtk-3.0/settings.ini		# Troque os temas Adwaita por Dracula
 sudo nano /usr/share/gtk-4.0/settings.ini		# Troque os temas Adwaita por Dracula
+
+## Instala o tema Dracula no RStudio
+# No console do RStudio, execute os comandos abaixo:
+install.packages("rstudioapi")
+rstudioapi::addTheme("https://raw.githubusercontent.com/dracula/rstudio/master/dracula.rstheme", apply = TRUE)
 
 ## Configuração do miniconda3
 conda activate base																	# Ativa o ambiente conda
