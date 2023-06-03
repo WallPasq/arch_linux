@@ -3,7 +3,7 @@
 🇧🇷
 
 Olá, eu sou Wallacy Pasqualini.
-Seja bem-vinde às minhas configurações do Arch Linux!
+Seja bem-vinda ou bem-vindo às minhas configurações do Arch Linux!
 Neste repositório, colocarei os arquivos de configuração (quando tiver alterado os mesmos) dos meus pacotes instalados.
 
 🇺🇸
